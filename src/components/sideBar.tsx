@@ -39,11 +39,9 @@ const SideBar = () => {
       <div className="hidden md:block  p-4">
         <div className="flex flex-col py-10 gap-4">
           <Link
-            to="/contact"
+            to="/"
             className={`${
-              location.pathname === "/contact"
-                ? "bg-blue-400 text-white"
-                : " border"
+              location.pathname === "/" ? "bg-blue-400 text-white" : " border"
             } p-2 rounded-lg`}
           >
             Contact
@@ -75,9 +73,9 @@ const SideBar = () => {
             <div className="flex flex-col gap-4">
               <Link
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
-                to="/contact"
+                to="/"
                 className={`${
-                  location.pathname === "/contact"
+                  location.pathname === "/"
                     ? "bg-blue-400 text-white"
                     : " border"
                 } p-2 rounded-lg`}
