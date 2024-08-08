@@ -63,10 +63,10 @@ const ContactCard = ({ closeCard, contactToEdit }: CardProps) => {
           {contact.id ? "Edit Contact" : "Create Contact"}
         </h1>
         <form
-          className="w-[450px] border rounded-lg shadow-lg p-4 flex flex-col gap-4"
+          className="md:w-[450px] border rounded-lg shadow-lg p-4 flex flex-col gap-4"
           onSubmit={onSubmitContact}
         >
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <label htmlFor="firstName">First Name :</label>
             <input
               type="text"
@@ -79,7 +79,7 @@ const ContactCard = ({ closeCard, contactToEdit }: CardProps) => {
             />
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <label htmlFor="lastName">Last Name :</label>
             <input
               type="text"

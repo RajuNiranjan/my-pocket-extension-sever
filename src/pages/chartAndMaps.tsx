@@ -57,6 +57,7 @@ const ChartAndMaps: React.FC = () => {
 
   async function fetchCovidData(url: string): Promise<any> {
     const response = await fetch(url);
+
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }
@@ -82,65 +83,69 @@ const ChartAndMaps: React.FC = () => {
   };
 
   const globalChartData = processData(globalData!);
+  console.log(globalChartData);
 
   return (
-    <>
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart
-          data={globalChartData}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="cases"
-            stroke="#8884d8"
-            activeDot={{ r: 8 }}
-          />
-          <Line type="monotone" dataKey="deaths" stroke="#82ca9d" />
-          <Line type="monotone" dataKey="recovered" stroke="#ffc658" />
-        </LineChart>
-      </ResponsiveContainer>
-      <MapContainer
-        center={[20, 10]}
-        zoom={2}
-        style={{ height: "400px", width: "100%" }}
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        {countriesData?.map((country) => (
-          <Marker
-            key={country.country}
-            position={[country.countryInfo.lat, country.countryInfo.long]}
-            icon={
-              new L.Icon({
-                iconUrl: country.countryInfo.flag,
-                iconSize: [25, 15],
-                iconAnchor: [12, 15],
-                popupAnchor: [1, -24],
-              })
-            }
+    <div className="flex flex-col gap-6">
+      <div className="border p-2 rounded-lg shadow-lg">
+        <h1 className="text-xl font-bold my-5">Chart</h1>
+        <ResponsiveContainer width="100%" height={350}>
+          <LineChart
+            data={globalChartData}
+            margin={{ top: 5, right: 30, left: 35, bottom: 5 }}
           >
-            <Popup>
-              <div>
-                <strong>{country.country}</strong>
-                <br />
-                Cases: {country.cases}
-                <br />
-                Deaths: {country.deaths}
-                <br />
-                Recovered: {country.recovered}
-                <br />
-                Active: {country.active}
-              </div>
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
-    </>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis textAnchor="end" width={60} />
+            <Tooltip />
+            <Legend />
+            <Line
+              type="monotone"
+              dataKey="cases"
+              stroke="#8884d8"
+              activeDot={{ r: 8 }}
+            />
+            <Line type="monotone" dataKey="deaths" stroke="#82ca9d" />
+            <Line type="monotone" dataKey="recovered" stroke="#ffc658" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="border p-2 rounded-lg shadow-lg">
+        <h1 className="text-xl font-bold my-5">Maps</h1>
+        <MapContainer center={[20, 10]} zoom={2} className="h-[350px] w-full">
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          {countriesData?.map((country) => (
+            <Marker
+              key={country.country}
+              position={[country.countryInfo.lat, country.countryInfo.long]}
+              icon={
+                new L.Icon({
+                  iconUrl: country.countryInfo.flag,
+                  iconSize: [25, 15],
+                  iconAnchor: [12, 15],
+                  popupAnchor: [1, -24],
+                })
+              }
+            >
+              <Popup>
+                <div>
+                  <strong>{country.country}</strong>
+                  <br />
+                  Cases: {country.cases}
+                  <br />
+                  Deaths: {country.deaths}
+                  <br />
+                  Recovered: {country.recovered}
+                  <br />
+                  Active: {country.active}
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>{" "}
+      </div>
+    </div>
   );
 };
 

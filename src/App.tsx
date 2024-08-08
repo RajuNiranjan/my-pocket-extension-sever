@@ -11,11 +11,11 @@ import SideBar from "./components/sideBar";
 const App = () => {
   const LayOut = () => {
     return (
-      <div className="flex w-full gap-4">
-        <div className="w-[20%]">
+      <div className="flex flex-col md:flex-row  w-full gap-4">
+        <div className="md:w-[20%]  z-50 sticky top-0">
           <SideBar />
         </div>
-        <div className="w-[80%] p-10">
+        <div className="md:w-[80%]  p-4">
           <Outlet />
         </div>
       </div>

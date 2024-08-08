@@ -56,10 +56,10 @@ const Contact = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-2">
+        <div className="flex flex-wrap  gap-2">
           {!addContact &&
             contact?.map((item, index) => (
-              <div key={index} className="flex flex-col gap-4">
+              <div key={index} className="flex m-5 flex-col gap-4">
                 <div className="w-[250px] bg-white shadow-lg rounded-lg p-2 border">
                   <h1>First Name: {item.firstName}</h1>
                   <h1>Last Name: {item.lastName}</h1>
