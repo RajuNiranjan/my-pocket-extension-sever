@@ -1,4 +1,4 @@
-# React + TypeScript + Vite
+<!-- # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
@@ -47,4 +47,49 @@ export default tseslint.config({
     ...react.configs['jsx-runtime'].rules,
   },
 })
-```
+``` -->
+
+Contact Management App with Charts and Maps
+
+This is a contact management application built with ReactJS, TypeScript, TailwindCSS, React Router v6, and React Query (TanstackQuery). The application also includes a dashboard with a line graph and a map showing COVID-19 case data.
+Table of Contents
+
+    Features
+    Technologies Used
+    Getting Started
+        Prerequisites
+        Installation
+        Running the App
+    API Endpoints
+    Usage
+        Contacts Management
+        Dashboard
+    Deployment
+    Contributing
+    License
+
+Features
+
+    Add, view, edit, and delete contacts.
+    Display a list of all contacts.
+    View contact details.
+    Dashboard with a line graph showing COVID-19 case fluctuations.
+    Map with markers showing country-specific COVID-19 data.
+
+Technologies Used
+
+    ReactJS
+    TypeScript
+    TailwindCSS
+    React Router v6
+    React Query (TanstackQuery)
+    Redux
+    Chart.js
+    React Leaflet
+    Vercel/GitHub Pages/Heroku for deployment
+
+Getting Started
+Prerequisites
+
+    Node.js (version 14 or higher)
+    npm or yarn
