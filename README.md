@@ -94,7 +94,7 @@ This is a Contact Management Application built with ReactJS, TypeScript, and Tai
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/your-repository-name.git
-cd your-repository-name
+git clone https://github.com/RajuNiranjan/contact_management_app?tab=readme-ov-file#technologies-used
+cd contact_management_app
 npm install # or yarn install
 ```
