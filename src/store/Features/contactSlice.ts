@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface Contact {
-  id: number | null;
+  id: number | undefined;
   firstName: string;
   lastName: string;
   status: boolean;

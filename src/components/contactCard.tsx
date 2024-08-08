@@ -1,29 +1,32 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addContact } from "../store/Features/contactSlice";
-import { RootState } from "../store/store";
+import { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import {
+  Contact,
+  addContact,
+  editContact,
+} from "../store/Features/contactSlice";
 
-interface ContactFormProp {
-  firstName: string;
-  lastName: string;
-  status: boolean;
-}
-
-interface Card {
+interface CardProps {
   closeCard: () => void;
+  contactToEdit?: Contact; // Optional contact for editing
 }
 
-const ContactCard = ({ closeCard }: Card) => {
-  const [contact, setContact] = useState<ContactFormProp>({
+const ContactCard = ({ closeCard, contactToEdit }: CardProps) => {
+  const [contact, setContact] = useState<Contact>({
     firstName: "",
     lastName: "",
     status: false,
+    id: undefined,
   });
 
   const dispatch = useDispatch();
-  const contactData = useSelector((state: RootState) => state.contact);
 
-  console.log(contactData);
+  // Populate form if editing
+  useEffect(() => {
+    if (contactToEdit) {
+      setContact(contactToEdit);
+    }
+  }, [contactToEdit]);
 
   const onChangeText = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -34,22 +37,36 @@ const ContactCard = ({ closeCard }: Card) => {
     }));
   };
 
+  const onStatusChange = (status: boolean) => {
+    setContact((prev) => ({ ...prev, status }));
+  };
+
   const onSubmitContact = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(addContact(contact));
-    console.log(contact);
+    if (contact.id) {
+      dispatch(
+        editContact({
+          ...contact,
+          id: contact.id,
+        })
+      );
+    } else {
+      dispatch(addContact(contact));
+    }
     closeCard();
   };
 
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <div className="flex flex-col gap-4">
-        <h1 className="text-4xl font-bold text-center">Create Contact</h1>
+        <h1 className="text-4xl font-bold text-center">
+          {contact.id ? "Edit Contact" : "Create Contact"}
+        </h1>
         <form
-          className="w-[450px] border rounded-lg shadow-lg  p-4 flex flex-col gap-4"
+          className="w-[450px] border rounded-lg shadow-lg p-4 flex flex-col gap-4"
           onSubmit={onSubmitContact}
         >
-          <div className="flex items-center  gap-4">
+          <div className="flex items-center gap-4">
             <label htmlFor="firstName">First Name :</label>
             <input
               type="text"
@@ -62,7 +79,7 @@ const ContactCard = ({ closeCard }: Card) => {
             />
           </div>
 
-          <div className="flex items-center  gap-4">
+          <div className="flex items-center gap-4">
             <label htmlFor="lastName">Last Name :</label>
             <input
               type="text"
@@ -77,7 +94,7 @@ const ContactCard = ({ closeCard }: Card) => {
 
           <div className="flex items-center gap-4">
             <h1>Status : </h1>
-            <div className="flex  gap-4">
+            <div className="flex gap-4">
               <div className="flex gap-2 items-center">
                 <input
                   type="radio"
@@ -85,10 +102,8 @@ const ContactCard = ({ closeCard }: Card) => {
                   id="active"
                   value="true"
                   checked={contact.status}
-                  onChange={() =>
-                    setContact((prev) => ({ ...prev, status: true }))
-                  }
-                />{" "}
+                  onChange={() => onStatusChange(true)}
+                />
                 <label htmlFor="active">Active</label>
               </div>
               <div className="flex gap-2 items-center">
@@ -98,10 +113,8 @@ const ContactCard = ({ closeCard }: Card) => {
                   id="inactive"
                   value="false"
                   checked={!contact.status}
-                  onChange={() =>
-                    setContact((prev) => ({ ...prev, status: false }))
-                  }
-                />{" "}
+                  onChange={() => onStatusChange(false)}
+                />
                 <label htmlFor="inactive">Inactive</label>
               </div>
             </div>
@@ -111,7 +124,7 @@ const ContactCard = ({ closeCard }: Card) => {
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
-            Submit
+            {contact.id ? "Update" : "Submit"}
           </button>
         </form>
       </div>

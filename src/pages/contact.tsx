@@ -1,23 +1,29 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ContactCard from "../components/contactCard";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { RxCross2 } from "react-icons/rx";
-import { deleteContact } from "../store/Features/contactSlice";
-
-interface ContactFormProp {
-  firstName: string;
-  lastName: string;
-  status: boolean;
-}
+import {
+  Contact as ContactType,
+  deleteContact,
+} from "../store/Features/contactSlice";
 
 const Contact = () => {
   const [addContact, setAddContact] = useState<boolean>(false);
+  const [contactToEdit, setContactToEdit] = useState<ContactType | undefined>(
+    undefined
+  );
   const dispatch = useDispatch();
   const { contact } = useSelector((state: RootState) => state.contact);
 
   const handleCloseCard = () => {
     setAddContact(false);
+    setContactToEdit(undefined);
+  };
+
+  const handleEditContact = (contact: ContactType) => {
+    setContactToEdit(contact);
+    setAddContact(true);
   };
 
   const handleDeleteContact = (id: number) => {
@@ -27,7 +33,10 @@ const Contact = () => {
   return (
     <div className="flex justify-center items-center h-screen flex-col gap-4">
       {addContact ? (
-        <ContactCard closeCard={handleCloseCard} />
+        <ContactCard
+          closeCard={handleCloseCard}
+          contactToEdit={contactToEdit}
+        />
       ) : (
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -47,10 +56,7 @@ const Contact = () => {
           </p>
         </div>
       ) : (
-        <div
-          className="grid grid-cols-2 gap-2
-        "
-        >
+        <div className="grid grid-cols-2 gap-2">
           {!addContact &&
             contact?.map((item, index) => (
               <div key={index} className="flex flex-col gap-4">
@@ -59,7 +65,7 @@ const Contact = () => {
                   <h1>Last Name: {item.lastName}</h1>
                   <p className="flex items-center gap-2">
                     Status :{" "}
-                    {item.status === true ? (
+                    {item.status ? (
                       <p className="text-green-500">Active</p>
                     ) : (
                       <p className="text-red-500">Inactive</p>
@@ -68,7 +74,10 @@ const Contact = () => {
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                  <button
+                    onClick={() => handleEditContact(item)}
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  >
                     Edit
                   </button>
                   <button
