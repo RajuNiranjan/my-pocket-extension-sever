@@ -1,4 +1,9 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { useState } from "react";
+import ContactCard from "../components/contactCard";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { RxCross2 } from "react-icons/rx";
+import { deleteContact } from "../store/Features/contactSlice";
 
 interface ContactFormProp {
   firstName: string;
@@ -7,100 +12,76 @@ interface ContactFormProp {
 }
 
 const Contact = () => {
-  const [contact, setContact] = useState<ContactFormProp>({
-    firstName: "",
-    lastName: "",
-    status: false,
-  });
+  const [addContact, setAddContact] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const { contact } = useSelector((state: RootState) => state.contact);
 
-  const onChangeText = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-
-    setContact((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+  const handleCloseCard = () => {
+    setAddContact(false);
   };
 
-  const onSubmitContact = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(contact);
+  const handleDeleteContact = (id: number) => {
+    dispatch(deleteContact(id));
   };
 
   return (
-    <div className="flex justify-center items-center w-full h-screen">
-      <div className="flex flex-col gap-4">
-        <h1 className="text-4xl font-bold text-center">Craete Contact</h1>
-        <form
-          className="w-[450px] border rounded-lg shadow-lg  p-4 flex flex-col gap-4"
-          onSubmit={onSubmitContact}
+    <div className="flex justify-center items-center h-screen flex-col gap-4">
+      {addContact ? (
+        <ContactCard closeCard={handleCloseCard} />
+      ) : (
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() => setAddContact(!addContact)}
         >
-          <div className="flex items-center  gap-4">
-            <label htmlFor="firstName">First Name :</label>
-            <input
-              type="text"
-              name="firstName"
-              id="firstName"
-              value={contact.firstName}
-              onChange={onChangeText}
-              className="border p-3 rounded-lg"
-              required
-            />
-          </div>
+          Create Contact
+        </button>
+      )}
 
-          <div className="flex items-center  gap-4">
-            <label htmlFor="lastName">Last Name :</label>
-            <input
-              type="text"
-              name="lastName"
-              id="lastName"
-              value={contact.lastName}
-              onChange={onChangeText}
-              className="border p-3 rounded-lg"
-              required
-            />
+      {contact.length === 0 && !addContact ? (
+        <div className="flex items-center justify-center gap-2 border p-2 rounded-lg shadow-lg">
+          <div className="h-7 w-7 bg-black text-white p-1 flex justify-center items-center rounded-full">
+            <RxCross2 />
           </div>
+          <p className="w-[250px]">
+            No Contact Found Please add Contact from create contact button
+          </p>
+        </div>
+      ) : (
+        <div
+          className="grid grid-cols-2 gap-2
+        "
+        >
+          {!addContact &&
+            contact?.map((item, index) => (
+              <div key={index} className="flex flex-col gap-4">
+                <div className="w-[250px] bg-white shadow-lg rounded-lg p-2 border">
+                  <h1>First Name: {item.firstName}</h1>
+                  <h1>Last Name: {item.lastName}</h1>
+                  <p className="flex items-center gap-2">
+                    Status :{" "}
+                    {item.status === true ? (
+                      <p className="text-green-500">Active</p>
+                    ) : (
+                      <p className="text-red-500">Inactive</p>
+                    )}
+                  </p>
+                </div>
 
-          <div className="flex items-center gap-4">
-            <h1>Status : </h1>
-            <div className="flex  gap-4">
-              <div className="flex gap-2 items-center">
-                <input
-                  type="radio"
-                  name="status"
-                  id="active"
-                  value="true"
-                  checked={contact.status}
-                  onChange={() =>
-                    setContact((prev) => ({ ...prev, status: true }))
-                  }
-                />{" "}
-                <label htmlFor="active">Active</label>
+                <div className="flex justify-between items-center">
+                  <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteContact(item.id!)}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-              <div className="flex gap-2 items-center">
-                <input
-                  type="radio"
-                  name="status"
-                  id="inactive"
-                  value="false"
-                  checked={!contact.status}
-                  onChange={() =>
-                    setContact((prev) => ({ ...prev, status: false }))
-                  }
-                />{" "}
-                <label htmlFor="inactive">Inactive</label>
-              </div>
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Submit
-          </button>
-        </form>
-      </div>
+            ))}
+        </div>
+      )}
     </div>
   );
 };
