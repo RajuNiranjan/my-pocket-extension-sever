@@ -63,42 +63,49 @@ const SideBar = () => {
       </div>
 
       {/* Mobile navigation (visible when menu is toggled) */}
-      <div className="md:hidden h-14 flex justify-end p-5 relative">
-        <IoMdMenu
-          onClick={() => setShowMobileMenu(!showMobileMenu)}
-          className="text-2xl"
-        />
-        {showMobileMenu && (
-          <div
-            ref={mobileMenuRef}
-            className="absolute p-4 bg-white shadow-lg z-40 rounded-lg top-14"
-          >
-            <div className="flex flex-col gap-4">
-              <Link
-                onClick={() => setShowMobileMenu(!showMobileMenu)}
-                to="/"
-                className={`${
-                  location.pathname === "/"
-                    ? "bg-blue-400 text-white"
-                    : " border"
-                } p-2 rounded-lg`}
-              >
-                Contact
-              </Link>
-              <Link
-                to="/charts&maps"
-                onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className={`${
-                  location.pathname === "/charts&maps"
-                    ? "bg-blue-400 text-white"
-                    : " border"
-                } p-2 rounded-lg`}
-              >
-                Charts and Maps
-              </Link>
+      <div className="md:hidden h-14 flex justify-between p-5 ">
+        <h1 className="font-medium text-xl tracking-wide capitalize text-white">
+          {location.pathname === "/" ? "Contact" : "Charts and Maps"}
+        </h1>
+
+        <div className="relative">
+          <IoMdMenu
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="text-2xl "
+          />
+
+          {showMobileMenu && (
+            <div
+              ref={mobileMenuRef}
+              className="absolute p-4 bg-white shadow-lg z-50 rounded-lg right-0 w-[250px] top-14"
+            >
+              <div className="flex flex-col gap-4">
+                <Link
+                  onClick={() => setShowMobileMenu(!showMobileMenu)}
+                  to="/"
+                  className={`${
+                    location.pathname === "/"
+                      ? "bg-blue-400 text-white"
+                      : " border"
+                  } p-2 rounded-lg`}
+                >
+                  Contact
+                </Link>
+                <Link
+                  to="/charts&maps"
+                  onClick={() => setShowMobileMenu(!showMobileMenu)}
+                  className={`${
+                    location.pathname === "/charts&maps"
+                      ? "bg-blue-400 text-white"
+                      : " border"
+                  } p-2 rounded-lg`}
+                >
+                  Charts and Maps
+                </Link>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

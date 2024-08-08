@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
   Outlet,
+  useLocation,
 } from "react-router-dom";
 import Contact from "./pages/contact";
 import ChartAndMaps from "./pages/chartAndMaps";
@@ -22,8 +23,20 @@ const App = () => {
     );
   };
 
+  const NavBar = () => {
+    const location = useLocation();
+    return (
+      <div className="h-14 sticky top-0  shadow-md text-center sm:flex justify-center items-center text-4xl text-black hidden ">
+        <h1 className="font-medium  capitalize ">
+          {location.pathname === "/" ? "Contact" : "Charts and Maps"}
+        </h1>
+      </div>
+    );
+  };
+
   return (
     <Router>
+      <NavBar />
       <Routes>
         <Route path="/" element={<LayOut />}>
           <Route path="" element={<Contact />} />
