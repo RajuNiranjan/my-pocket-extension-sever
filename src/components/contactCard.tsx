@@ -8,7 +8,7 @@ import {
 
 interface CardProps {
   closeCard: () => void;
-  contactToEdit?: Contact; // Optional contact for editing
+  contactToEdit?: Contact;
 }
 
 const ContactCard = ({ closeCard, contactToEdit }: CardProps) => {
