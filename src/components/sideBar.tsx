@@ -5,7 +5,7 @@ const SideBar = () => {
   const location = useLocation();
 
   return (
-    <div className="w-[20%] h-screen shadow-lg p-4">
+    <div className=" h-screen shadow-lg p-4">
       <div className="flex flex-col gap-4">
         <Link
           to="/contact"
