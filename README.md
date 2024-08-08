@@ -12,8 +12,6 @@ This is a Contact Management Application built with ReactJS, TypeScript, and Tai
 - [API Endpoints](#api-endpoints)
 - [Usage](#usage)
 - [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
@@ -33,9 +31,15 @@ This is a Contact Management Application built with ReactJS, TypeScript, and Tai
 - Redux
 - Chart.js
 - React Leaflet
-- Deployment: Vercel, GitHub Pages, Heroku
+- Deployment: Vercel
 
 ## Getting Started
+
+## API Endpoints
+
+- **World wide data of cases**: https://disease.sh/v3/covid-19/all
+- **Country Specific data of cases**: https://disease.sh/v3/covid-19/countries
+- **Graph data for cases with date**: https://disease.sh/v3/covid-19/historical/all?lastdays=all
 
 ### Prerequisites
 

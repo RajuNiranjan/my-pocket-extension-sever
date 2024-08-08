@@ -6,12 +6,15 @@ import {
   editContact,
 } from "../store/Features/contactSlice";
 
+// Define the type for the props expected by the ContactCard component
 interface CardProps {
-  closeCard: () => void;
-  contactToEdit?: Contact;
+  closeCard: () => void; // Function to close the contact card
+  contactToEdit?: Contact; // Optional contact object for editing
 }
 
+// The ContactCard component, taking the closeCard function and an optional contactToEdit object
 const ContactCard = ({ closeCard, contactToEdit }: CardProps) => {
+  // State management for the contact, initialized based on whether there is a contact to edit
   const [contact, setContact] = useState<Contact>({
     firstName: "",
     lastName: "",
@@ -19,41 +22,39 @@ const ContactCard = ({ closeCard, contactToEdit }: CardProps) => {
     id: undefined,
   });
 
+  // Using useDispatch hook from react-redux to dispatch actions
   const dispatch = useDispatch();
 
-  // Populate form if editing
+  // Effect to populate the contact form if there's an existing contact to edit
   useEffect(() => {
     if (contactToEdit) {
       setContact(contactToEdit);
     }
-  }, [contactToEdit]);
+  }, [contactToEdit]); // Dependency on contactToEdit to run only when it changes
 
+  // Handler for text input changes, updating state with computed property names
   const onChangeText = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-
     setContact((prev) => ({
       ...prev,
       [id]: value,
     }));
   };
 
+  // Handler for status change (Active/Inactive)
   const onStatusChange = (status: boolean) => {
     setContact((prev) => ({ ...prev, status }));
   };
 
+  // Handler for form submission, dispatching add or edit actions based on contact id presence
   const onSubmitContact = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default form submission behavior
     if (contact.id) {
-      dispatch(
-        editContact({
-          ...contact,
-          id: contact.id,
-        })
-      );
+      dispatch(editContact({ ...contact, id: contact.id }));
     } else {
       dispatch(addContact(contact));
     }
-    closeCard();
+    closeCard(); // Close the contact card upon submission
   };
 
   return (
@@ -78,7 +79,6 @@ const ContactCard = ({ closeCard, contactToEdit }: CardProps) => {
               required
             />
           </div>
-
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <label htmlFor="lastName">Last Name :</label>
             <input
@@ -91,9 +91,8 @@ const ContactCard = ({ closeCard, contactToEdit }: CardProps) => {
               required
             />
           </div>
-
           <div className="flex items-center gap-4">
-            <h1>Status : </h1>
+            <h1>Status :</h1>
             <div className="flex gap-4">
               <div className="flex gap-2 items-center">
                 <input
@@ -119,7 +118,6 @@ const ContactCard = ({ closeCard, contactToEdit }: CardProps) => {
               </div>
             </div>
           </div>
-
           <button
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -132,4 +130,5 @@ const ContactCard = ({ closeCard, contactToEdit }: CardProps) => {
   );
 };
 
+// Exporting the ContactCard component
 export default ContactCard;

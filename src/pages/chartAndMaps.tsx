@@ -14,6 +14,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
+// Define TypeScript interfaces for structured data types used within the component
 interface CovidData {
   cases: Record<string, number>;
   deaths: Record<string, number>;
@@ -33,7 +34,9 @@ interface CountryData {
   active: number;
 }
 
+// Main functional component for displaying charts and maps
 const ChartAndMaps: React.FC = () => {
+  // Fetch global COVID data using react-query
   const {
     data: globalData,
     error: globalError,
@@ -46,6 +49,7 @@ const ChartAndMaps: React.FC = () => {
       ),
   });
 
+  // Fetch country-specific COVID data using react-query
   const {
     data: countriesData,
     error: countriesError,
@@ -55,15 +59,16 @@ const ChartAndMaps: React.FC = () => {
     queryFn: () => fetchCovidData("https://disease.sh/v3/covid-19/countries"),
   });
 
+  // Function to fetch data from the API
   async function fetchCovidData(url: string): Promise<any> {
     const response = await fetch(url);
-
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }
     return response.json();
   }
 
+  // Display loading or error messages based on the fetch state
   if (globalLoading || countriesLoading) return <div>Loading...</div>;
   if (globalError || countriesError)
     return (
@@ -72,6 +77,7 @@ const ChartAndMaps: React.FC = () => {
       </div>
     );
 
+  // Function to process the fetched global data into a format suitable for charting
   const processData = (data: CovidData) => {
     const chartData = Object.keys(data.cases).map((date) => ({
       date,
@@ -82,8 +88,8 @@ const ChartAndMaps: React.FC = () => {
     return chartData;
   };
 
+  // Process global data for chart display
   const globalChartData = processData(globalData!);
-  console.log(globalChartData);
 
   return (
     <div className="flex flex-col gap-6">
@@ -143,7 +149,7 @@ const ChartAndMaps: React.FC = () => {
               </Popup>
             </Marker>
           ))}
-        </MapContainer>{" "}
+        </MapContainer>
       </div>
     </div>
   );
