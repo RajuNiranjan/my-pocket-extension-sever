@@ -49,47 +49,52 @@ export default tseslint.config({
 })
 ``` -->
 
-Contact Management App with Charts and Maps
+# Contact Management App
 
-This is a contact management application built with ReactJS, TypeScript, TailwindCSS, React Router v6, and React Query (TanstackQuery). The application also includes a dashboard with a line graph and a map showing COVID-19 case data.
-Table of Contents
+This is a Contact Management Application built with ReactJS, TypeScript, and TailwindCSS, featuring a dashboard with a line graph and a map displaying COVID-19 case data. This application allows for robust contact management including adding, editing, and deleting contact details, alongside visual data presentations.
 
-    Features
-    Technologies Used
-    Getting Started
-        Prerequisites
-        Installation
-        Running the App
-    API Endpoints
-    Usage
-        Contacts Management
-        Dashboard
-    Deployment
-    Contributing
-    License
+## Table of Contents
 
-Features
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+- [API Endpoints](#api-endpoints)
+- [Usage](#usage)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [License](#license)
 
-    Add, view, edit, and delete contacts.
-    Display a list of all contacts.
-    View contact details.
-    Dashboard with a line graph showing COVID-19 case fluctuations.
-    Map with markers showing country-specific COVID-19 data.
+## Features
 
-Technologies Used
+- **Contact Management**: Add, view, edit, and delete contacts.
+- **Contacts List**: Display a list of all contacts.
+- **Contact Details**: View details for each contact.
+- **Dashboard**: Includes a line graph showing COVID-19 case fluctuations.
+- **Map Visualization**: Map with markers showing country-specific COVID-19 data.
 
-    ReactJS
-    TypeScript
-    TailwindCSS
-    React Router v6
-    React Query (TanstackQuery)
-    Redux
-    Chart.js
-    React Leaflet
-    Vercel/GitHub Pages/Heroku for deployment
+## Technologies Used
 
-Getting Started
-Prerequisites
+- ReactJS
+- TypeScript
+- TailwindCSS
+- React Router v6
+- React Query (TanstackQuery)
+- Redux
+- Chart.js
+- React Leaflet
+- Deployment: Vercel, GitHub Pages, Heroku
 
-    Node.js (version 14 or higher)
-    npm or yarn
+## Getting Started
+
+### Prerequisites
+
+- Node.js (version 14 or higher)
+- npm or yarn
+
+### Installation
+
+```bash
+git clone https://github.com/your-username/your-repository-name.git
+cd your-repository-name
+npm install # or yarn install
+```
