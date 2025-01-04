@@ -1,30 +1,39 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { SignUpDto } from 'src/dtos/SignUp.dto';
-import { UserSchema } from 'src/models/auth.model';
+import { User } from 'src/models/auth.model';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel('UserSchema') private readonly userModel: Model<UserSchema>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly jwtServie: JwtService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto) {
-    const { email, userName, password } = signUpDto;
-    const user = await this.userModel.findOne({ email });
-    if (user) {
-      throw new BadRequestException('User already exists');
+  async signup(signUpDto: SignUpDto) {
+    const { email, password, userName } = signUpDto;
+    const existingUser = await this.userModel.findOne({ email });
+    if (existingUser) {
+      throw new BadRequestException('User with this email already existed');
     }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const salt = await bcrypt.genSalt(12);
+    const hashPassword = await bcrypt.hash(password, salt);
+
     const newUser = new this.userModel({
       email,
       userName,
-      password: hashedPassword,
+      password: hashPassword,
     });
+
     await newUser.save();
-    return { message: 'User created successfully' };
+
+    const payload = { userId: newUser._id };
+
+    const token = this.jwtServie.sign(payload);
+    return { token };
   }
 }
