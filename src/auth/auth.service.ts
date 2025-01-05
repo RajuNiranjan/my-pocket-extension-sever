@@ -57,4 +57,15 @@ export class AuthService {
     const token = this.jwtServie.sign(payload);
     return { token };
   }
+
+  async me(id: string) {
+    const user = await this.userModel.findById(id);
+
+    if (!user) {
+      throw new BadRequestException('User not found, invalid token');
+    }
+    const userRes = user.toObject();
+    delete userRes.password;
+    return userRes;
+  }
 }
