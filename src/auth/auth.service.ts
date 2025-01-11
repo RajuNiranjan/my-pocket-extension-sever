@@ -46,7 +46,9 @@ export class AuthService {
   async login(logInDto: LogInDto): Promise<{ token: string }> {
     const { password, userNameOrEmail } = logInDto;
 
-    const user = await this.userModel.findOne({ email: userNameOrEmail });
+    const user = await this.userModel.findOne({
+      $or: [{ email: userNameOrEmail }, { userName: userNameOrEmail }],
+    });
     if (!user) {
       throw new BadRequestException('user not found');
     }
