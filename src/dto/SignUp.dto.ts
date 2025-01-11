@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Matches,
+} from 'class-validator';
 
 export class SignUpDto {
   @IsNotEmpty()
@@ -6,7 +12,7 @@ export class SignUpDto {
   userName: string;
 
   @IsNotEmpty()
-  @IsEmail({}, { message: 'email must be a valid email address' })
+  @IsEmail({}, { message: 'must be a valid email' })
   email: string;
 
   @IsNotEmpty()
@@ -16,4 +22,8 @@ export class SignUpDto {
       'Password must be 6-15 characters long, contain at least one uppercase letter, one number, and one special character.',
   })
   password: string;
+
+  @IsString()
+  @IsOptional()
+  profilePic: string;
 }

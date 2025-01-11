@@ -1,8 +1,17 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignUpDto } from 'src/dtos/SignUp.dto';
-import { LogInDto } from 'src/dtos/LogIn.dto';
-import { JwtAuthGuard } from 'src/lib/JwtAuthGuard';
+import { SignUpDto } from 'src/dto/SignUp.dto';
+import { LogInDto } from 'src/dto/LogIn.dto';
+import { JwtAuthGuard } from 'src/middlewares/jwtAuthGuard';
+import { UpdateProfileDto } from 'src/dto/UpdateProfile.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -14,13 +23,19 @@ export class AuthController {
   }
 
   @Post('/login')
-  Login(@Body() logInDto: LogInDto): Promise<{ token: string }> {
+  LogIn(@Body() logInDto: LogInDto): Promise<{ token: string }> {
     return this.authService.login(logInDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  async Me(@Req() req: any) {
+  Me(@Req() req: any) {
     return this.authService.me(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('/update')
+  UpdateProfile(@Req() req: any, @Body() updateProfileDto: UpdateProfileDto) {
+    return this.authService.updateProfile(req.user, updateProfileDto);
   }
 }
