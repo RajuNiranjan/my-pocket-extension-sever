@@ -10,13 +10,13 @@ export class Pocket {
   title: string;
 
   @Prop()
-  description: string;
+  description?: string;
 
   @Prop({ required: true })
   content: string;
 
-  @Prop({ type: [String] })
-  images: string[];
+  @Prop({ type: [String], default: [] })
+  images?: string[];
 }
 
 export const PocketSchema = SchemaFactory.createForClass(Pocket);

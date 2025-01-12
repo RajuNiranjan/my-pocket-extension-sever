@@ -1,4 +1,4 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsArray, ArrayUnique } from 'class-validator';
 
 export class UpdatePocketDto {
   @IsString()
@@ -12,4 +12,9 @@ export class UpdatePocketDto {
   @IsString()
   @IsOptional()
   content?: string;
+
+  @IsArray()
+  @ArrayUnique()
+  @IsOptional()
+  images?: string[];
 }

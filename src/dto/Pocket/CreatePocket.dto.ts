@@ -3,15 +3,10 @@ import {
   IsNotEmpty,
   IsOptional,
   IsArray,
-  ArrayNotEmpty,
   ArrayUnique,
 } from 'class-validator';
 
 export class CreatePocketDto {
-  @IsString()
-  @IsNotEmpty()
-  userId: string;
-
   @IsString()
   @IsNotEmpty()
   title: string;
@@ -25,9 +20,7 @@ export class CreatePocketDto {
   content: string;
 
   @IsArray()
-  @ArrayNotEmpty()
   @ArrayUnique()
-  @IsString({ each: true })
   @IsOptional()
   images?: string[];
 }
