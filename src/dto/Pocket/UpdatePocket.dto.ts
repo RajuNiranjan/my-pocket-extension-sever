@@ -11,7 +11,11 @@ export class UpdatePocketDto {
 
   @IsString()
   @IsOptional()
-  content?: string;
+  pocket_userName?: string;
+
+  @IsString()
+  @IsOptional()
+  pocket_password?: string;
 
   @IsArray()
   @ArrayUnique()

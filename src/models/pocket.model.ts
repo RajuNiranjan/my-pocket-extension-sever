@@ -12,8 +12,11 @@ export class Pocket {
   @Prop()
   description?: string;
 
-  @Prop({ required: true })
-  content: string;
+  @Prop()
+  pocket_userName?: string;
+
+  @Prop()
+  pocket_password?: string;
 
   @Prop({ type: [String], default: [] })
   images?: string[];

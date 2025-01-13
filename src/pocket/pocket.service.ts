@@ -16,11 +16,13 @@ export class PocketService {
   }
 
   async createPocketItem(userId: string, createPocketDto: CreatePocketDto) {
-    const { content, title, description, images } = createPocketDto;
+    const { pocket_password, pocket_userName, title, description, images } =
+      createPocketDto;
 
     const newPocketItem = new this.pocketModel({
       userId,
-      content,
+      pocket_password,
+      pocket_userName,
       title,
       description,
       images,

@@ -16,8 +16,12 @@ export class CreatePocketDto {
   description?: string;
 
   @IsString()
-  @IsNotEmpty()
-  content: string;
+  @IsOptional()
+  pocket_userName?: string;
+
+  @IsString()
+  @IsOptional()
+  pocket_password?: string;
 
   @IsArray()
   @ArrayUnique()
