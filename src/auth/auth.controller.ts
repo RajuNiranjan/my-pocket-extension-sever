@@ -8,10 +8,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignUpDto } from 'src/dto/SignUp.dto';
-import { LogInDto } from 'src/dto/LogIn.dto';
+import { SignUpDto } from 'src/dto/Auth/SignUp.dto';
+import { LogInDto } from 'src/dto/Auth/LogIn.dto';
 import { JwtAuthGuard } from 'src/middlewares/jwtAuthGuard';
-import { UpdateProfileDto } from 'src/dto/UpdateProfile.dto';
+import { UpdateProfileDto } from 'src/dto/Auth/UpdateProfile.dto';
 
 @Controller('auth')
 export class AuthController {

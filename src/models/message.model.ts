@@ -1,7 +1,8 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
-export class Message {
+export class Message extends Document {
   @Prop({ required: true, ref: 'User' })
   senderId: string;
 
@@ -11,3 +12,5 @@ export class Message {
   @Prop({ required: true })
   message: string;
 }
+
+export const MessageSchema = SchemaFactory.createForClass(Message);
