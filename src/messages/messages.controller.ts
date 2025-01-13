@@ -22,6 +22,12 @@ export class MessagesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get()
+  GetAllUsers(@Req() req: any) {
+    return this.messageService.getAllUsers(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post(':receiverId')
   SendMessage(
     @Req() req: any,

@@ -20,6 +20,13 @@ export class MessagesService {
     return messages;
   }
 
+  async getAllUsers(userId: string) {
+    const users = await this.messageModel
+      .find({ _id: { $ne: userId } })
+      .select('-password');
+    return users;
+  }
+
   async sendMessage(
     senderId: string,
     receiverId: string,
