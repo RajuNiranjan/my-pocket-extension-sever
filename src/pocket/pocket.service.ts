@@ -65,4 +65,25 @@ export class PocketService {
 
     return { message: 'Pocket item deleted successfully' };
   }
+
+  async getPocketItemByQuery(query: string) {
+    const queryLetters = new Set(query.toLowerCase());
+
+    const items = await this.pocketModel.find().exec();
+
+    const filteredItems = items.filter((item) => {
+      const titleLetters = new Set(item.title.toLowerCase());
+      return Array.from(queryLetters).every((letter) =>
+        titleLetters.has(letter),
+      );
+    });
+
+    if (filteredItems.length === 0) {
+      throw new NotFoundException(
+        `No items found containing all letters from "${query}"`,
+      );
+    }
+
+    return filteredItems;
+  }
 }

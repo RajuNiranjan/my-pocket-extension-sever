@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -64,5 +65,11 @@ export class PocketController {
       throw new NotFoundException('User ID is not available in the request.');
     }
     return await this.pocketService.deletePocketItem(userId, pocketItemId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('search')
+  GetPocketItemByQuery(@Query('title') title: string) {
+    return this.pocketService.getPocketItemByQuery(title);
   }
 }
