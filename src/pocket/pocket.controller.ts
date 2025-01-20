@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -69,7 +70,10 @@ export class PocketController {
 
   @UseGuards(JwtAuthGuard)
   @Get('search')
-  GetPocketItemByQuery(@Query('title') title: string) {
-    return this.pocketService.getPocketItemByQuery(title);
+  async getPocketItemByQuery(@Query('title') title: string) {
+    if (!title) {
+      throw new BadRequestException('Search title is required');
+    }
+    return await this.pocketService.getPocketItemByQuery(title);
   }
 }

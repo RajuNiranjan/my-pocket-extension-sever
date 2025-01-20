@@ -67,23 +67,16 @@ export class PocketService {
   }
 
   async getPocketItemByQuery(query: string) {
-    const queryLetters = new Set(query.toLowerCase());
+    const items = await this.pocketModel
+      .find({
+        title: { $regex: query, $options: 'i' },
+      })
+      .exec();
 
-    const items = await this.pocketModel.find().exec();
-
-    const filteredItems = items.filter((item) => {
-      const titleLetters = new Set(item.title.toLowerCase());
-      return Array.from(queryLetters).every((letter) =>
-        titleLetters.has(letter),
-      );
-    });
-
-    if (filteredItems.length === 0) {
-      throw new NotFoundException(
-        `No items found containing all letters from "${query}"`,
-      );
+    if (items.length === 0) {
+      throw new NotFoundException(`No items found matching "${query}"`);
     }
 
-    return filteredItems;
+    return items;
   }
 }
