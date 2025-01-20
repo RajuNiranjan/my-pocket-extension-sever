@@ -66,15 +66,13 @@ export class PocketService {
     return { message: 'Pocket item deleted successfully' };
   }
 
-  async getPocketItemByQuery(query: string) {
+  async findPocketItemsByTitle(title: string) {
     const items = await this.pocketModel
-      .find({
-        title: { $regex: query, $options: 'i' },
-      })
+      .find({ title: { $regex: title, $options: 'i' } })
       .exec();
 
-    if (items.length === 0) {
-      throw new NotFoundException(`No items found matching "${query}"`);
+    if (!items || items.length === 0) {
+      throw new NotFoundException(`No items found matching "${title}"`);
     }
 
     return items;

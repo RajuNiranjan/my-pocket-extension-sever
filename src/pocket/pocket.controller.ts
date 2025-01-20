@@ -70,10 +70,11 @@ export class PocketController {
 
   @UseGuards(JwtAuthGuard)
   @Get('search')
-  async getPocketItemByQuery(@Query('title') title: string) {
+  async searchPocketItems(@Query('title') title: string) {
     if (!title) {
       throw new BadRequestException('Search title is required');
     }
-    return await this.pocketService.getPocketItemByQuery(title);
+
+    return await this.pocketService.findPocketItemsByTitle(title);
   }
 }
