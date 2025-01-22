@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   Req,
   UseGuards,
@@ -41,7 +42,7 @@ export class PocketController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':pocketItemId')
+  @Put(':pocketItemId')
   async updatePocketItem(
     @Req() req: any,
     @Param('pocketItemId') pocketItemId: string,
