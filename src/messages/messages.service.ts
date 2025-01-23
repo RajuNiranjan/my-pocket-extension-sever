@@ -8,7 +8,7 @@ import { Message } from 'src/models/message.model';
 export class MessagesService {
   constructor(
     @InjectModel(Message.name) private readonly messageModel: Model<Message>,
-  ) {}
+  ) { }
 
   async getAllMessages(senderId: string, receiverId: string) {
     const messages = await this.messageModel.find({

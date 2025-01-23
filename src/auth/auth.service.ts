@@ -13,7 +13,7 @@ export class AuthService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signup(signUpDto: SignUpDto): Promise<{ token: string }> {
     const { email, password, userName } = signUpDto;
@@ -84,5 +84,13 @@ export class AuthService {
       throw new BadRequestException('user not found');
     }
     return user;
+  }
+
+
+  async getAllUsers(userId: string) {
+    const users = await this.userModel
+      .find({ _id: { $ne: userId } })
+      .select('-password');
+    return users;
   }
 }

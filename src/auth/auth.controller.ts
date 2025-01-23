@@ -15,7 +15,7 @@ import { UpdateProfileDto } from 'src/dto/Auth/UpdateProfile.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('/signup')
   SignUp(@Body() signUpDto: SignUpDto): Promise<{ token: string }> {
@@ -38,4 +38,11 @@ export class AuthController {
   UpdateProfile(@Req() req: any, @Body() updateProfileDto: UpdateProfileDto) {
     return this.authService.updateProfile(req.user, updateProfileDto);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/all")
+  GetAllUsers(@Req() req: any) {
+    return this.authService.getAllUsers(req.user);
+  }
+
 }
