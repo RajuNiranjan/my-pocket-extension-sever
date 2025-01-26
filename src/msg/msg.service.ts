@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { SendMessageDto } from 'src/dto/Message/SendMessage.dto';
+import { SendMsgDto } from 'src/dto/Msg/Msg.dto';
+
 import { User } from 'src/models/auth.model';
 import { Msg } from 'src/models/msg.model';
 
@@ -15,7 +16,7 @@ export class MsgService {
   async sendMessage(
     senderId: string,
     receiverId: string,
-    sendMsgDto: SendMessageDto,
+    sendMsgDto: SendMsgDto,
   ) {
     const { message } = sendMsgDto;
 
