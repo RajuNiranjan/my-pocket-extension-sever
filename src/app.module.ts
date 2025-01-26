@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { PocketModule } from './pocket/pocket.module';
 import { MessagesModule } from './messages/messages.module';
+import { MsgModule } from './msg/msg.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { MessagesModule } from './messages/messages.module';
     AuthModule,
     PocketModule,
     MessagesModule,
+    MsgModule,
   ],
   controllers: [AppController],
   providers: [AppService],
