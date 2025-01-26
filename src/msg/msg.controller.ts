@@ -27,7 +27,16 @@ export class MsgController {
 
   @UseGuards(JwtAuthGuard)
   @Get('users')
-  GetAllUsers(@Req() req:any) {
+  GetAllUsers(@Req() req: any) {
     return this.msgService.getAllUsers(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':receiverId')
+  GetConversationMsgs(
+    @Req() req: any,
+    @Param('receiverId') receiverId: string,
+  ) {
+    return this.msgService.getConversationMsgs(req.user, receiverId);
   }
 }

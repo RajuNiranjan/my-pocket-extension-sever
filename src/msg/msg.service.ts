@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { SendMessageDto } from 'src/dto/Message/SendMessage.dto';
@@ -17,10 +17,16 @@ export class MsgService {
     receiverId: string,
     sendMsgDto: SendMessageDto,
   ) {
+    const { message } = sendMsgDto;
+
+    if (!message) {
+      throw new BadRequestException('message should not be empty');
+    }
+
     const newMsg = new this.msgModel({
       senderId,
       receiverId,
-      sendMsgDto,
+      message,
     });
 
     await newMsg.save();
@@ -30,5 +36,14 @@ export class MsgService {
     return this.userModel
       .find({ _id: { $ne: currentUserId } })
       .select('-password');
+  }
+
+  async getConversationMsgs(senderId: string, receiverId: string) {
+    return this.msgModel.find({
+      $or: [
+        { senderId, receiverId },
+        { senderId: receiverId, receiverId: senderId },
+      ],
+    });
   }
 }
