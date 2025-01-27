@@ -31,6 +31,7 @@ export class MsgService {
     });
 
     await newMsg.save();
+    return newMsg;
   }
 
   async getAllUsers(currentUserId: string) {
