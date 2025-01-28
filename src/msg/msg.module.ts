@@ -5,6 +5,7 @@ import { JwtStrategy } from 'src/utils/jwtStrategy';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Msg, MsgSchema } from 'src/models/msg.model';
 import { AuthModule } from 'src/auth/auth.module';
+import { MsgGateWay } from './msg.gateway';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { AuthModule } from 'src/auth/auth.module';
     AuthModule,
   ],
   controllers: [MsgController],
-  providers: [MsgService, JwtStrategy],
+  providers: [MsgService, JwtStrategy, MsgGateWay],
 })
 export class MsgModule {}
