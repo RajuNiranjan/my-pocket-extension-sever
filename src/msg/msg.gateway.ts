@@ -120,7 +120,7 @@ export class MsgGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('sendMessage')
   async handleSendMessage(
-    @MessageBody()
+    client: Socket,
     data: {
       senderId: string;
       receiverId: string;
@@ -134,12 +134,13 @@ export class MsgGateWay implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     try {
-      // Save message to database
       const savedMessage = await this.msgService.sendMessage(
         senderId,
         receiverId,
         { message },
       );
+
+      console.log('Message saved:', savedMessage);
 
       // Find receiver's socket
       const receiverSocketId = Array.from(this.clients.entries()).find(
@@ -148,20 +149,14 @@ export class MsgGateWay implements OnGatewayConnection, OnGatewayDisconnect {
 
       // Emit to receiver if online
       if (receiverSocketId) {
+        console.log('Emitting to receiver:', receiverId);
         this.server.to(receiverSocketId).emit('newMessage', savedMessage);
       }
 
-      // Find sender's socket
-      const senderSocketId = Array.from(this.clients.entries()).find(
-        ([, userId]) => userId === senderId,
-      )?.[0];
+      // Emit back to sender
+      client.emit('messageSent', savedMessage);
 
-      // Emit to sender
-      if (senderSocketId) {
-        this.server.to(senderSocketId).emit('newMessage', savedMessage);
-      }
-
-      return { status: 'success', message: 'Message sent', data: savedMessage };
+      return { status: 'success', data: savedMessage };
     } catch (error) {
       console.error('Error handling message:', error);
       return { status: 'error', message: 'Failed to send message' };

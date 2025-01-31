@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { SendMsgDto } from 'src/dto/Msg/Msg.dto';
+import mongoose from 'mongoose';
 
 import { User } from 'src/models/auth.model';
 import { Msg } from 'src/models/msg.model';
@@ -28,6 +29,7 @@ export class MsgService {
       senderId,
       receiverId,
       message,
+      isRead: false,
     });
 
     await newMsg.save();
@@ -47,5 +49,35 @@ export class MsgService {
         { senderId: receiverId, receiverId: senderId },
       ],
     });
+  }
+
+  async getUnreadMessageCount(userId: string) {
+    const unreadMessages = await this.msgModel.aggregate([
+      {
+        $match: {
+          receiverId: new mongoose.Types.ObjectId(userId),
+          isRead: false,
+        },
+      },
+      {
+        $group: {
+          _id: '$senderId',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    return unreadMessages.length;
+  }
+
+  async markMessagesAsRead(receiverId: string, senderId: string) {
+    await this.msgModel.updateMany(
+      {
+        receiverId: new mongoose.Types.ObjectId(receiverId),
+        senderId: new mongoose.Types.ObjectId(senderId),
+        isRead: false,
+      },
+      { $set: { isRead: true } },
+    );
   }
 }

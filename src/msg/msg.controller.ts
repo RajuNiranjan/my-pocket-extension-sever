@@ -39,4 +39,19 @@ export class MsgController {
   ) {
     return this.msgService.getConversationMsgs(req.user, receiverId);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('unread/count')
+  async getUnreadMessageCount(@Req() req: any) {
+    return this.msgService.getUnreadMessageCount(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('mark-read/:senderId')
+  async markMessagesAsRead(
+    @Req() req: any,
+    @Param('senderId') senderId: string,
+  ) {
+    return this.msgService.markMessagesAsRead(req.user, senderId);
+  }
 }
