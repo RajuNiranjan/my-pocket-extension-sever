@@ -115,7 +115,6 @@ export class MsgGateWay implements OnGatewayConnection, OnGatewayDisconnect {
   async handleDisconnect(client: Socket) {
     const userId = this.clients.get(client.id);
     console.log(`Client disconnected: ${client.id}, User: ${userId}`);
-
     this.clients.delete(client.id);
   }
 
@@ -134,23 +133,39 @@ export class MsgGateWay implements OnGatewayConnection, OnGatewayDisconnect {
       return { status: 'error', message: 'Invalid message data' };
     }
 
-    const savedMessage = await this.msgService.sendMessage(
-      senderId,
-      receiverId,
-      { message },
-    );
+    try {
+      // Save message to database
+      const savedMessage = await this.msgService.sendMessage(
+        senderId,
+        receiverId,
+        { message },
+      );
 
-    const receiverSocket = Array.from(this.clients.entries()).find(
-      ([, userId]) => userId === receiverId,
-    );
+      // Find receiver's socket
+      const receiverSocketId = Array.from(this.clients.entries()).find(
+        ([, userId]) => userId === receiverId,
+      )?.[0];
 
-    if (receiverSocket) {
-      this.server.to(receiverSocket[0]).emit('newMessage', savedMessage);
+      // Emit to receiver if online
+      if (receiverSocketId) {
+        this.server.to(receiverSocketId).emit('newMessage', savedMessage);
+      }
+
+      // Find sender's socket
+      const senderSocketId = Array.from(this.clients.entries()).find(
+        ([, userId]) => userId === senderId,
+      )?.[0];
+
+      // Emit to sender
+      if (senderSocketId) {
+        this.server.to(senderSocketId).emit('newMessage', savedMessage);
+      }
+
+      return { status: 'success', message: 'Message sent', data: savedMessage };
+    } catch (error) {
+      console.error('Error handling message:', error);
+      return { status: 'error', message: 'Failed to send message' };
     }
-
-    this.server.to(receiverSocket?.[0] || '').emit('messageSent', savedMessage);
-
-    return { status: 'success', message: 'Message sent', data: savedMessage };
   }
 
   @SubscribeMessage('getMessages')
@@ -158,12 +173,10 @@ export class MsgGateWay implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: { senderId: string; receiverId: string },
   ) {
     const { senderId, receiverId } = data;
-
     const messages = await this.msgService.getConversationMsgs(
       senderId,
       receiverId,
     );
-
     return { status: 'success', data: messages };
   }
 }
