@@ -68,7 +68,6 @@ export class PocketController {
     }
     return await this.pocketService.deletePocketItem(userId, pocketItemId);
   }
-
   @UseGuards(JwtAuthGuard)
   @Get('search')
   async searchPocketItems(@Query('title') title: string) {
