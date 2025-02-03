@@ -80,4 +80,17 @@ export class MsgService {
       { $set: { isRead: true } },
     );
   }
+
+  async getLastMessage(senderId: string, receiverId: string) {
+    const lastMessage = await this.msgModel.findOne({
+      $or: [
+        { senderId, receiverId },
+        { senderId: receiverId, receiverId: senderId },
+      ],
+    })
+    .sort({ createdAt: -1 })
+    .select('message createdAt');
+
+    return lastMessage;
+  }
 }

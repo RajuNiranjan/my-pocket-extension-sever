@@ -54,4 +54,10 @@ export class MsgController {
   ) {
     return this.msgService.markMessagesAsRead(req.user, senderId);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':receiverId/last')
+  async getLastMessage(@Req() req: any, @Param('receiverId') receiverId: string) {
+    return this.msgService.getLastMessage(req.user, receiverId);
+  }
 }
