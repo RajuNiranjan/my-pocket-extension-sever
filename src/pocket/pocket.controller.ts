@@ -17,6 +17,7 @@ import { PocketService } from './pocket.service';
 import { JwtAuthGuard } from 'src/middlewares/jwtAuthGuard';
 import { CreatePocketDto } from 'src/dto/Pocket/CreatePocket.dto';
 import { UpdatePocketDto } from 'src/dto/Pocket/UpdatePocket.dto';
+import { SharePocketDto } from 'src/dto/Pocket/SharePocket.dto';
 
 @Controller('pocket')
 export class PocketController {
@@ -68,6 +69,8 @@ export class PocketController {
     }
     return await this.pocketService.deletePocketItem(userId, pocketItemId);
   }
+
+
   @UseGuards(JwtAuthGuard)
   @Get('search')
   async searchPocketItems(@Query('title') title: string) {
@@ -76,5 +79,21 @@ export class PocketController {
     }
 
     return await this.pocketService.findPocketItemsByTitle(title);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':receiverId/share/:pocketItemId')
+  async sharePocketItem(
+    @Req() req: any,
+    @Param('receiverId') receiverId: string,
+    @Param('pocketItemId') pocketItemId: string,
+  ) {
+  return this.pocketService.sharePocketItem(req.user, receiverId, pocketItemId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('shared')
+  async getSharedPocketItems(@Req() req: any) {
+    return this.pocketService.getSharedPocketItems(req.user);
   }
 }

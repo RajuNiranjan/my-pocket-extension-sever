@@ -12,7 +12,12 @@ export class PocketService {
   ) {}
 
   async getAllPocketItems(userId: string) {
-    return await this.pocketModel.find({ userId }).exec();
+    return await this.pocketModel.find({
+      $or: [
+        { userId },
+        { sharedWith: userId },
+      ],
+    }).exec();
   }
 
   async createPocketItem(userId: string, createPocketDto: CreatePocketDto) {
@@ -26,6 +31,7 @@ export class PocketService {
       title,
       description,
       images,
+      sharedWith: [],
     });
 
     return await newPocketItem.save();
@@ -76,5 +82,23 @@ export class PocketService {
     }
 
     return items;
+  }
+
+  async sharePocketItem(senderId: string, receiverId: string, pocketItemId: string) {
+    const originalPocket = await this.pocketModel.findOne({
+      _id: pocketItemId,
+      userId: senderId,
+    });
+
+    if (!originalPocket) {
+      throw new NotFoundException('Pocket item not found');
+    }
+
+    originalPocket.sharedWith = [...(originalPocket.sharedWith || []), receiverId];
+    return await originalPocket.save();
+  }
+
+  async getSharedPocketItems(userId: string) {
+    return await this.pocketModel.find({ sharedWith: userId }).exec();
   }
 }

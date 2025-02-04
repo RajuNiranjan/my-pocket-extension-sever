@@ -20,6 +20,9 @@ export class Pocket {
 
   @Prop({ type: [String], default: [] })
   images?: string[];
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], default: [] })
+  sharedWith: string[];
 }
 
 export const PocketSchema = SchemaFactory.createForClass(Pocket);
